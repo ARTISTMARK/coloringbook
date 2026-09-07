@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="description" content="ARTISTMARK. COLOR — select a color and bring an ARTISTMARK composition to life." />
+  <title>ARTISTMARK. COLOR</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="ARTISTMARK Color home">
+      <span>ARTISTMARK.</span> <em>COLOR</em>
+    </a>
+    <p>Select a color. Find the number. Bring the artwork to life.</p>
+  </header>
+
+  <main class="app-shell">
+    <section class="art-panel" aria-label="Coloring canvas">
+      <div class="art-toolbar">
+        <div>
+          <span class="eyebrow">PAINT BY NUMBERS</span>
+          <h1>Composition No. 01</h1>
+          <span class="guide-badge">V2 · ORIGINAL-COLOR GUIDE</span>
+        </div>
+        <div class="tool-actions">
+          <button id="zoomOut" class="icon-button" aria-label="Zoom out">−</button>
+          <button id="zoomReset" class="zoom-label" aria-label="Reset zoom">100%</button>
+          <button id="zoomIn" class="icon-button" aria-label="Zoom in">+</button>
+        </div>
+      </div>
+
+      <div id="canvasViewport" class="canvas-viewport">
+        <div id="canvasStage" class="canvas-stage">
+          <canvas id="paintCanvas" aria-label="Interactive numbered artwork"></canvas>
+        </div>
+        <div id="loading" class="loading">Preparing your canvas…</div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="progress-wrap">
+          <div class="progress-copy"><span>YOUR PROGRESS</span><strong id="progressText">0%</strong></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </div>
+        <div class="history-actions">
+          <button id="undoBtn" class="text-button" disabled>Undo</button>
+          <button id="resetBtn" class="text-button">Reset</button>
+          <button id="downloadBtn" class="primary-button">Download</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="palette-panel" aria-label="Color palette">
+      <div class="palette-heading">
+        <span class="eyebrow">YOUR PALETTE</span>
+        <h2>Choose a color</h2>
+        <p>Tap a swatch, then tap the area carrying that number. The lightly colored guide preserves the character of the original.</p>
+      </div>
+      <div id="palette" class="palette-grid"></div>
+      <div class="selected-card">
+        <span id="selectedSwatch" class="selected-swatch"></span>
+        <div><small>SELECTED</small><strong id="selectedLabel">Color 1</strong></div>
+      </div>
+      <button id="hintBtn" class="secondary-button">Highlight matching numbers</button>
+      <button id="revealBtn" class="ghost-button">Hold to reveal original</button>
+      <p class="tip"><strong>Tip:</strong> Scroll naturally to reach the entire artwork. Zoom in for smaller regions; drag with two fingers or hold the spacebar to move around.</p>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
