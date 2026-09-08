@@ -1,12 +1,6 @@
-const IMAGE_FILE = 'artwork.png';
-const ART_CROP_WIDTH = 1098;
-
-const COLORS = [
-  '#f5a019', '#f5e3bb', '#f7d2aa', '#df3028', '#3659c9',
-  '#70ad2c', '#f1a7b7', '#ffe46e', '#cb4b9d', '#b6956c',
-  '#f0f0ef', '#8c3d40', '#9586bd', '#879db9', '#ed4f2b',
-  '#1538bf', '#8ba44e', '#f8b61e', '#2db5b5', '#2c2c2c'
-];
+const ARTWORKS = window.ARTWORKS || [];
+let currentArtwork = 0;
+let COLORS = ARTWORKS[0]?.colors || [];
 
 const canvas = document.querySelector('#paintCanvas');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -20,6 +14,9 @@ const progressText = document.querySelector('#progressText');
 const progressBar = document.querySelector('#progressBar');
 const loading = document.querySelector('#loading');
 const toast = document.querySelector('#toast');
+const artworkList = document.querySelector('#artworkList');
+const artworkTitle = document.querySelector('#artworkTitle');
+const verticalScroll = document.querySelector('#verticalScroll');
 
 let selected = 0;
 let templateData;
@@ -34,6 +31,7 @@ let spaceDown = false;
 let revealPressed = false;
 
 function createPalette() {
+  palette.innerHTML = '';
   COLORS.forEach((color, i) => {
     const button = document.createElement('button');
     button.className = `swatch-button${i === 0 ? ' selected' : ''}`;
@@ -44,6 +42,34 @@ function createPalette() {
     palette.append(button);
   });
   updateSelectedCard();
+}
+
+function createArtworkList() {
+  artworkList.innerHTML = '';
+  ARTWORKS.forEach((artwork, index) => {
+    const button = document.createElement('button');
+    button.className = `artwork-choice${index === currentArtwork ? ' selected' : ''}`;
+    button.setAttribute('aria-label', `Choose ${artwork.title}`);
+    button.title = artwork.title;
+    button.innerHTML = `<div class="artwork-thumb"><img src="${artwork.file}" alt=""><span class="artwork-number">#${index + 1}</span></div>`;
+    button.addEventListener('click', () => chooseArtwork(index));
+    artworkList.append(button);
+  });
+}
+
+function chooseArtwork(index) {
+  if (index === currentArtwork) return;
+  currentArtwork = index;
+  COLORS = ARTWORKS[index].colors;
+  selected = 0; history = []; fills = 0;
+  updateProgress(); undoBtn.disabled = true;
+  document.querySelectorAll('.artwork-choice').forEach((el, i) => el.classList.toggle('selected', i === index));
+  createPalette();
+  artworkTitle.textContent = ARTWORKS[index].title;
+  loading.textContent = 'Preparing your canvas…';
+  loading.classList.remove('hidden');
+  setZoom(1);
+  loadArtwork();
 }
 
 function selectColor(index) {
@@ -58,9 +84,10 @@ function updateSelectedCard() {
 }
 
 function loadArtwork() {
+  const artwork = ARTWORKS[currentArtwork];
   const img = new Image();
   img.onload = () => {
-    canvas.width = ART_CROP_WIDTH;
+    canvas.width = artwork.cropWidth || img.width;
     canvas.height = img.height;
     const offscreen = document.createElement('canvas');
     offscreen.width = canvas.width;
@@ -71,9 +98,10 @@ function loadArtwork() {
     templateData = makeTemplate(originalArt);
     ctx.putImageData(templateData, 0, 0);
     loading.classList.add('hidden');
+    requestAnimationFrame(syncVerticalScroll);
   };
   img.onerror = () => { loading.textContent = 'Artwork could not be loaded.'; };
-  img.src = IMAGE_FILE;
+  img.src = artwork.file;
 }
 
 function makeTemplate(source) {
@@ -195,12 +223,13 @@ function nearestColor(rgb) {
 }
 
 function applyTransform() {
-  stage.style.width = `${zoom * 100}%`;
+  canvas.style.width = `${zoom * 100}%`;
   document.querySelector('#zoomReset').textContent = `${Math.round(zoom * 100)}%`;
+  requestAnimationFrame(syncVerticalScroll);
 }
 
 function setZoom(next) {
-  zoom = Math.max(1, Math.min(3, next));
+  zoom = Math.max(.5, Math.min(3, next));
   if (zoom === 1) { viewport.scrollLeft = 0; viewport.scrollTop = 0; }
   applyTransform();
 }
@@ -240,6 +269,16 @@ window.addEventListener('keyup', (event) => { if (event.code === 'Space') { spac
 document.querySelector('#zoomIn').addEventListener('click', () => setZoom(zoom + .25));
 document.querySelector('#zoomOut').addEventListener('click', () => setZoom(zoom - .25));
 document.querySelector('#zoomReset').addEventListener('click', () => setZoom(1));
+
+function syncVerticalScroll() {
+  const max = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+  verticalScroll.max = String(Math.max(1, Math.round(max)));
+  verticalScroll.value = String(Math.min(max, Math.round(viewport.scrollTop)));
+  verticalScroll.disabled = max < 2;
+}
+verticalScroll.addEventListener('input', () => { viewport.scrollTop = Number(verticalScroll.value); });
+viewport.addEventListener('scroll', syncVerticalScroll, { passive: true });
+window.addEventListener('resize', syncVerticalScroll);
 
 undoBtn.addEventListener('click', () => {
   const prior = history.pop();
@@ -303,5 +342,7 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
 }
 
+createArtworkList();
 createPalette();
+artworkTitle.textContent = ARTWORKS[0]?.title || 'Experimental POP ART Composition #1';
 loadArtwork();

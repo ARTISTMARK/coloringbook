@@ -10,19 +10,28 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#" aria-label="ARTISTMARK Color home">
-      <span>ARTISTMARK.</span> <em>COLOR</em>
+    <a class="brand" href="https://www.artistmark.com" aria-label="Visit ARTISTMARK.com">
+      <img src="artistmark-logo.png" alt="ARTISTMARK.com" />
+      <span>ARTISTMARK. <em>COLOR</em></span>
     </a>
     <p>Select a color. Find the number. Bring the artwork to life.</p>
   </header>
 
   <main class="app-shell">
+    <aside class="artwork-panel" aria-label="Choose artwork">
+      <div class="artwork-heading">
+        <span class="eyebrow">EXPERIMENTAL POP ART</span>
+        <h2>Choose artwork</h2>
+        <p>Select a composition to paint.</p>
+      </div>
+      <div id="artworkList" class="artwork-list"></div>
+    </aside>
     <section class="art-panel" aria-label="Coloring canvas">
       <div class="art-toolbar">
         <div>
           <span class="eyebrow">PAINT BY NUMBERS</span>
-          <h1>Composition No. 01</h1>
-          <span class="guide-badge">V2 · ORIGINAL-COLOR GUIDE</span>
+          <h1 id="artworkTitle">Experimental POP ART Composition #1</h1>
+          <span class="guide-badge">V4 · EXPERIMENTAL POP ART COLLECTION</span>
         </div>
         <div class="tool-actions">
           <button id="zoomOut" class="icon-button" aria-label="Zoom out">−</button>
@@ -31,11 +40,14 @@
         </div>
       </div>
 
-      <div id="canvasViewport" class="canvas-viewport">
-        <div id="canvasStage" class="canvas-stage">
-          <canvas id="paintCanvas" aria-label="Interactive numbered artwork"></canvas>
+      <div class="canvas-scroll-shell">
+        <div id="canvasViewport" class="canvas-viewport">
+          <div id="canvasStage" class="canvas-stage">
+            <canvas id="paintCanvas" aria-label="Interactive numbered artwork"></canvas>
+          </div>
+          <div id="loading" class="loading">Preparing your canvas…</div>
         </div>
-        <div id="loading" class="loading">Preparing your canvas…</div>
+        <input id="verticalScroll" class="image-scrollbar" type="range" min="0" max="100" value="0" aria-label="Move artwork up and down" />
       </div>
 
       <div class="bottom-bar">
@@ -68,7 +80,12 @@
     </aside>
   </main>
 
+  <footer class="site-footer">
+    © 2026 Experimental POP artwork by ARTISTMARK | All Rights Reserved.&nbsp; Any reproduction of any content contained herein is strictly prohibited.
+  </footer>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="artworks.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

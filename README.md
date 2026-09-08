@@ -1,6 +1,6 @@
 # ARTISTMARK. COLOR
 
-An interactive, browser-based ARTISTMARK paint-by-numbers experience. V2 preserves a lightly colored version of the original artwork as the guide and allows full horizontal and vertical navigation on smaller screens.
+An interactive, browser-based ARTISTMARK paint-by-numbers experience. V4 includes eight Experimental POP ART compositions while preserving the left selector, adjacent scrollbar, and 50%–300% zoom.
 
 ## Publish with GitHub Pages
 
@@ -13,9 +13,11 @@ The app uses only HTML, CSS, and JavaScript. No installation or build step is re
 
 ## Included controls
 
-- Select any of 20 numbered colors
+- Choose from eight Experimental POP ART compositions
+- Use an artwork-specific numbered palette
 - Click, tap, or use Apple Pencil to fill enclosed areas
-- Scroll, zoom, and pan across the complete artwork
+- Scroll vertically with the dedicated control beside the image
+- Zoom from 50% through 300%
 - Original-color guided canvas with stronger, separated palette labels
 - Correct-color feedback when a selected color does not match a region
 - Undo and reset
@@ -24,4 +26,4 @@ The app uses only HTML, CSS, and JavaScript. No installation or build step is re
 
 ## Adding another composition
 
-Replace `artwork.png` with another 1:1 paint-by-numbers image. If the new image includes a palette on the right, update `ART_CROP_WIDTH` in `app.js` so only the artwork appears on the canvas. Update `COLORS` to match its numbered palette.
+Add the new guide image to `dist/`, then add its title, filename, artwork crop width, and 20-color palette to `dist/artworks.js`.
