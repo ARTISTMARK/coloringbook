@@ -51,7 +51,7 @@ function createArtworkList() {
     button.className = `artwork-choice${index === currentArtwork ? ' selected' : ''}`;
     button.setAttribute('aria-label', `Choose ${artwork.title}`);
     button.title = artwork.title;
-    button.innerHTML = `<div class="artwork-thumb"><img src="${artwork.file}" alt=""><span class="artwork-number">#${index + 1}</span></div>`;
+    button.innerHTML = `<div class="artwork-thumb"><img src="${artwork.file}" alt=""><span class="artwork-number">#${Number(artwork.id)}</span></div>`;
     button.addEventListener('click', () => chooseArtwork(index));
     artworkList.append(button);
   });
@@ -163,16 +163,6 @@ function fillAt(x, y) {
 
   const hex = COLORS[selected];
   const target = [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
-  const sourcePixel = (y * canvas.width + x) * 4;
-  const intended = nearestColor([
-    originalArt.data[sourcePixel],
-    originalArt.data[sourcePixel + 1],
-    originalArt.data[sourcePixel + 2]
-  ]);
-  if (intended !== selected) {
-    showToast(`That area uses color ${intended + 1}.`);
-    return;
-  }
   if (Math.abs(sr-target[0]) + Math.abs(sg-target[1]) + Math.abs(sb-target[2]) < 18) return;
 
   history.push(image);
@@ -209,17 +199,6 @@ function updateProgress() {
   const pct = Math.min(100, Math.round((fills / 65) * 100));
   progressText.textContent = `${pct}%`;
   progressBar.style.width = `${pct}%`;
-}
-
-function nearestColor(rgb) {
-  let best = 0;
-  let bestDistance = Infinity;
-  COLORS.forEach((hex, index) => {
-    const candidate = [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
-    const distance = (rgb[0]-candidate[0])**2 + (rgb[1]-candidate[1])**2 + (rgb[2]-candidate[2])**2;
-    if (distance < bestDistance) { bestDistance = distance; best = index; }
-  });
-  return best;
 }
 
 function applyTransform() {
@@ -298,7 +277,7 @@ document.querySelector('#resetBtn').addEventListener('click', () => {
 
 document.querySelector('#downloadBtn').addEventListener('click', () => {
   const link = document.createElement('a');
-  link.download = 'ARTISTMARK-COLOR-composition-01.png';
+  link.download = `ARTISTMARK-COLOR-composition-${ARTWORKS[currentArtwork].id}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
   showToast('Your artwork has been downloaded.');

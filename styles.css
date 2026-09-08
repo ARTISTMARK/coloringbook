@@ -10,6 +10,7 @@
 * { box-sizing: border-box; }
 
 html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+body { overflow-x: hidden; }
 button { font: inherit; }
 
 .site-header {
@@ -92,27 +93,56 @@ h2 { font-size: 26px; }
 .site-footer { background: var(--black); color: #aaa; padding: 18px clamp(22px, 4vw, 58px); border-top: 1px solid #333; font-size: 10px; line-height: 1.6; letter-spacing: .04em; text-align: center; }
 
 @media (max-width: 820px) {
-  .site-header { min-height: 76px; padding: 8px 20px; }
-  .brand img { width: 60px; height: 60px; }
-  .brand span { font-size: 18px; }
+  .site-header { position: sticky; top: 0; z-index: 30; min-height: 68px; padding: 6px 14px; }
+  .brand { gap: 10px; }
+  .brand img { width: 54px; height: 54px; }
+  .brand span { font-size: 17px; }
   .site-header p { display: none; }
-  .app-shell { grid-template-columns: 1fr; min-height: auto; }
-  .artwork-panel { padding: 18px; overflow: visible; }
-  .artwork-heading { padding: 0 0 12px; }
-  .artwork-list { height: auto; min-height: 0; overflow-x: auto; overflow-y: hidden; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 92px; padding: 2px 2px 12px; }
-  .art-panel { min-height: calc(100vh - 76px); }
-  .canvas-viewport { min-height: 52vh; }
-  .palette-panel { border-left: 0; border-top: 1px solid var(--line); }
-  .palette-grid { grid-template-columns: repeat(5, 1fr); }
+  .app-shell { display: flex; flex-direction: column; min-height: auto; }
+  .artwork-panel { order: 1; padding: 14px; overflow: visible; }
+  .artwork-heading { padding: 0 0 10px; }
+  .artwork-heading h2 { font-size: 21px; }
+  .artwork-heading p { font-size: 13px; }
+  .artwork-list { height: auto; min-height: 0; overflow-x: auto; overflow-y: hidden; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 84px; gap: 9px; padding: 3px 3px 10px; scroll-snap-type: x proximity; }
+  .artwork-choice { scroll-snap-align: start; }
+  .palette-panel { order: 2; border-left: 0; border-top: 1px solid var(--line); padding: 16px 14px 14px; }
+  .palette-heading { display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 12px; }
+  .palette-heading .eyebrow { grid-column: 1 / -1; }
+  .palette-heading h2 { font-size: 21px; white-space: nowrap; }
+  .palette-heading p { margin: 5px 0 12px; font-size: 13px; line-height: 1.4; }
+  .palette-grid { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
+  .swatch-button { min-height: 36px; }
+  .swatch-button span { top: 3px; left: 3px; min-width: 19px; height: 19px; padding: 0 4px; font-size: 10px; }
+  .selected-card { margin: 13px 0 9px; }
+  .secondary-button, .ghost-button { min-height: 44px; }
+  .tip { font-size: 12px; margin-top: 12px; }
+  .art-panel { order: 3; min-height: 0; padding: 18px 14px 20px; }
+  .art-toolbar { align-items: center; margin-bottom: 12px; }
+  .art-toolbar h1 { font-size: clamp(20px, 5.8vw, 27px); }
+  .guide-badge { font-size: 10px; }
+  .tool-actions button { min-width: 44px; height: 44px; }
+  .zoom-label { width: 62px; }
+  .canvas-scroll-shell { min-height: 58svh; }
+  .canvas-viewport { height: 58svh; min-height: 420px; }
+  .image-scrollbar { height: 58svh; min-height: 420px; flex-basis: 20px; width: 20px; }
   .bottom-bar { align-items: stretch; flex-direction: column; }
   .progress-wrap { max-width: none; }
-  .history-actions { justify-content: flex-end; }
+  .history-actions { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .history-actions button { min-height: 46px; }
 }
 
 @media (max-width: 460px) {
-  .art-toolbar { align-items: center; }
-  h1 { font-size: 22px; }
-  .canvas-viewport { min-height: 48vh; }
+  .brand span { max-width: 150px; white-space: normal; line-height: 1.05; }
+  .palette-heading { display: block; }
+  .palette-heading h2 { white-space: normal; }
+  .palette-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+  .swatch-button { min-height: 48px; }
+  .swatch-button span { top: 5px; left: 5px; min-width: 22px; height: 22px; font-size: 11px; }
+  .art-toolbar { align-items: flex-start; flex-direction: column; }
+  .tool-actions { align-self: stretch; justify-content: space-between; }
+  .tool-actions button { flex: 1; }
+  .canvas-viewport { min-height: 390px; }
+  .image-scrollbar { min-height: 390px; }
   .canvas-stage { padding: 0; }
-  .palette-panel { padding: 24px 18px; }
+  .site-footer { padding: 16px; font-size: 11px; }
 }
